@@ -4,11 +4,13 @@ const fs = require("fs");
 
 const {
     userHome,
+    turfSpots,
 
 } = require('../controller/user');
 
 //user routing....
 router.get("/", userHome);
+router.get("/turfspots", turfSpots);
 
 
 module.exports = router;

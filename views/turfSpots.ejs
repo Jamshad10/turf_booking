@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body
+    style="background-image: url('https://img.freepik.com/premium-photo/background-green-grass-field-green-grass-pattern-texture-green-lawn-background_64749-1638.jpg?w=996');">
+    <!-- Navbar start-->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-sm ">
+        <a class="navbar-brand m-lg-2" href="#">
+            <img src="https://cdn.icon-icons.com/icons2/716/PNG/512/Kick_icon-icons.com_62265.png" width="30"
+                height="30" alt="logo">
+            Play Spot
+        </a>
+        <h2 class="navbar-brand mx-auto fas fa-futbol" href="#">
+            <i style="font-style: italic;">Choose Your Play Station</i>
+        </h2>
+
+        <a class="nav-item active" style="margin-left: 50px;">
+            <a class="nav-link" href="/" style="color: aliceblue;"><i class="fas fa-home me-1"
+                    style="color: azure;"></i>Home</a>
+        </a>
+    </nav>
+
+    <!-- Navbar end -->
+    <!-- Searchbar start -->
+    <form class="form-inline mt-4 d-flex justify-content-center">
+        <input class="form-control mr-2" type="search" placeholder="Search Your Nearest Location" aria-label="Search"
+            style="width: 500px;">
+        <button class="btn btn-info" type="submit"><i class="fas fa-search"></i></button>
+    </form>
+    <!-- Searchbar end -->
+
+    <!-- Card start -->
+
+    <div class="container bcontent mt-5 ">
+        <% turf.forEach(el=> { %>
+            <div class="card m-3" style="width: 1150px; background-color: rgb(48, 42, 42); color: aliceblue;">
+                <div class="row no-gutters">
+                    <div class="col-sm-5">
+                        <img class="card-img" src="<%= el.image %>" alt="Turf img">
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="card-body">
+                            <h5 class="card-title">Name: <%= el.name %>
+                            </h5>
+                            <h5 class="card-title">Location: <%= el.location %>
+                            </h5>
+                            <h6 class="">Size: <%= el.size %>
+                            </h6>
+                            <h6 class="">Price: <%= el.price %>
+                            </h6>
+
+                            <a href="#" class="btn btn-primary mt-1">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+    </div>
+    <!-- Card end -->
+
+    <style>
+        /* Navbar style start */
+        .bg-custom-1 {
+            background-color: #85144b;
+        }
+
+        .bg-custom-2 {
+            background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
+        }
+
+        /* Navbar style end */
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
