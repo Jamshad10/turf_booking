@@ -1,0 +1,331 @@
+<%- include('layout/headerlinks') %>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+
+    <div class="form-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6 mx-auto">
+                    <form class="form-horizontal m-2 mx-auto" id="payment-form" action="/payment" method="post">
+                        <span class="heading">Book Your Slot & Pay</span>
+
+                        <div class="form-group help">
+                            <input type="name" class="form-control" id="inputPassword3" name="turf"
+                                value="<%= turf.name %>">
+                            <i class="fa fa-futbol-o"></i>
+
+                        </div>
+
+                        <div class="form-group help">
+                            <input type="email" class="form-control" id="inputPassword3" name="email"
+                                placeholder="Enter Your Email">
+                            <i class="fa fa-envelope"></i>
+
+                        </div>
+                        <div class="form-group help">
+                            <input type="name" class="form-control" id="inputPassword3" name="name"
+                                placeholder="Enter Name">
+                            <i class="fa fa-user"></i>
+
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="date" id="date" name="date"><br>
+                            <i class="far fa-calendar-alt"></i>
+
+                            <label for="time"><b>Available Time Slots:</b> </label>
+                            <select class="form-control" id="time" name="time">
+                                <option value="">Select Time</option>
+                                <option value="7pm-8pm">7.00 pm - 8.00 pm</option>
+                                <option value="8pm-9pm">8.00 pm - 9.00 pm</option>
+                                <option value="9pm-10pm">9.00 pm - 10.00 pm</option>
+                                <option value="10pm-11pm">10.00 pm - 11.00 pm</option>
+                                <option value="11pm-12am">11.00 pm - 12.00 am</option>
+                            </select>
+                            <br>
+
+                            <div class="form-group">
+                                <input class="form-control " type="number" name="price" value="<%= turf.price %>">
+                                <i class="fa fa-dollar"></i>
+                            </div>
+                            <br>
+                            <input type="submit" value="Book Your Slot" class="btn btn-default">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .form-bg {
+            background-image: url('https://images.unsplash.com/photo-1544914379-806667cd9489?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHVyZnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60');
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .form-horizontal {
+            background: #fff;
+            padding-bottom: 40px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .form-horizontal .heading {
+            display: block;
+            font-size: 35px;
+            font-weight: 700;
+            padding: 35px 0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 30px;
+        }
+
+        .form-horizontal .form-group {
+            padding: 0 40px;
+            margin: 0 0 25px 0;
+            position: relative;
+        }
+
+        .form-horizontal .form-control {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            box-shadow: none;
+            padding: 0 20px 0 45px;
+            height: 40px;
+            transition: all 0.3s ease 0s;
+        }
+
+        .form-horizontal .form-control:focus {
+            background: #e0e0e0;
+            box-shadow: none;
+            outline: 0 none;
+        }
+
+        .form-horizontal .form-group i {
+            position: absolute;
+            top: 12px;
+            left: 60px;
+            font-size: 17px;
+            color: #c8c8c8;
+            transition: all 0.5s ease 0s;
+        }
+
+        .form-horizontal .form-control:focus+i {
+            color: #00b4ef;
+        }
+
+        .form-horizontal .fa-question-circle {
+            display: inline-block;
+            position: absolute;
+            top: 12px;
+            right: 60px;
+            font-size: 20px;
+            color: #808080;
+            transition: all 0.5s ease 0s;
+        }
+
+        .form-horizontal .fa-question-circle:hover {
+            color: #000;
+        }
+
+        .form-horizontal .main-checkbox {
+            float: left;
+            width: 20px;
+            height: 20px;
+            background: #11a3fc;
+            border-radius: 50%;
+            position: relative;
+            margin: 5px 0 0 5px;
+            border: 1px solid #11a3fc;
+        }
+
+        .form-horizontal .main-checkbox label {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+
+        .form-horizontal .main-checkbox label:after {
+            content: "";
+            width: 10px;
+            height: 5px;
+            position: absolute;
+            top: 5px;
+            left: 4px;
+            border: 3px solid #fff;
+            border-top: none;
+            border-right: none;
+            background: transparent;
+            opacity: 0;
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+
+        .form-horizontal .main-checkbox input[type=checkbox] {
+            visibility: hidden;
+        }
+
+        .form-horizontal .main-checkbox input[type=checkbox]:checked+label:after {
+            opacity: 1;
+        }
+
+        .form-horizontal .text {
+            float: left;
+            margin-left: 7px;
+            line-height: 20px;
+            padding-top: 5px;
+            text-transform: capitalize;
+        }
+
+        .form-horizontal .btn {
+            float: right;
+            font-size: 14px;
+            color: #fff;
+            background: #00b4ef;
+            border-radius: 30px;
+            padding: 10px 25px;
+            border: none;
+            text-transform: capitalize;
+            transition: all 0.5s ease 0s;
+        }
+
+        @media only screen and (max-width: 479px) {
+            .form-horizontal .form-group {
+                padding: 0 25px;
+            }
+
+            .form-horizontal .form-group i {
+                left: 45px;
+            }
+
+            .form-horizontal .btn {
+                padding: 10px 20px;
+            }
+        }
+
+        .unavailable {
+            background-color: #ddd;
+            color: #aaa;
+        }
+
+        input[type="date"].active-date::-webkit-datetime-edit-day-field {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        input[type="date"][min],
+        input[type="date"][max] {
+            background: #eee;
+            color: #999;
+            cursor: not-allowed;
+        }
+    </style>
+    <!-- <button id="rzp-button1" >Pay with Razorpay</button>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
+    <script>
+        //calender fix........
+
+        // Get the current date
+        var today = new Date();
+
+        // Calculate the date 4 days from now
+        var maxDate = new Date();
+        maxDate.setDate(today.getDate() + 4);
+
+        // Set the minimum and maximum dates for the date picker
+        var dateInput = document.getElementById("date");
+        dateInput.setAttribute("min", today.toISOString().split('T')[0]);
+        dateInput.setAttribute("max", maxDate.toISOString().split('T')[0]);
+
+        //calender fix ended.........
+
+        //payment section........
+
+        // var orderId;
+        // $(document).ready(function () {
+        //     var settings = {
+        //         "url": "/create/orderId",
+        //         "method": "POST",
+        //         "timeout": 0,
+        //         "headers": {
+        //             "Content-Type": "application/json"
+        //         },
+        //         "data": JSON.stringify({
+        //             "amount": "50000"
+        //         }),
+        //     };
+
+        //     //creates new orderId everytime
+        //     $.ajax(settings).done(function (response) {
+
+        //         orderId = response.orderId;
+        //         console.log(orderId);
+        //         $("button").show();
+        //     });
+        // });
+        // document.getElementById('rzp-button1').onclick = function (e) {
+        //     var options = {
+        //         "key": "rzp_test_WKrQLwNRyULyLw", // Enter the Key ID generated from the Dashboard
+        //         "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        //         "currency": "INR",
+        //         "name": "Play Spot",
+        //         "description": "Booking Transaction",
+        //         "image": "https://example.com/your_logo",
+        //         "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        //         "handler": function (response) {
+        //             alert(response.razorpay_payment_id);
+        //             alert(response.razorpay_order_id);
+        //             alert(response.razorpay_signature)
+        //             var settings = {
+        //                 "url": "/api/payment/verify",
+        //                 "method": "POST",
+        //                 "timeout": 0,
+        //                 "headers": {
+        //                     "Content-Type": "application/json"
+        //                 },
+        //                 "data": JSON.stringify({ response }),
+        //             }
+        //         },
+        //         "theme": {
+        //             "color": "#99cc33"
+        //         }
+        //     };
+        //     var rzp1 = new Razorpay(options);
+        //     rzp1.on('payment.failed', function (response) {
+        //         alert(response.error.code);
+        //         alert(response.error.description);
+        //         alert(response.error.source);
+        //         alert(response.error.step);
+        //         alert(response.error.reason);
+        //         alert(response.error.metadata.order_id);
+        //         alert(response.error.metadata.payment_id);
+        //     });
+        //     rzp1.open();
+        //     e.preventDefault();
+        // }
+
+
+    </script>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+    <%- include('layout/footerlinks') %>
+
+        </body>
+
+        </html>

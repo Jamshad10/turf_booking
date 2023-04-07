@@ -149,6 +149,25 @@ const postEditTurf = async (req,res) => {
       });
 };
 
+const deleteTurf = (req,res) => {
+    let id = req.params.id;
+    Turf.findByIdAndRemove(id)
+     .then((result) => {
+        console.log(result);
+        if (result && result.image != '') {
+            try {
+                fs.unlinkSync('./public/images/uploads' + result.image);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        res.redirect('/admin/adminitems');
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+}
+
 module.exports = {
     adminlog,
     adminSign,
@@ -160,4 +179,5 @@ module.exports = {
     adminItemsView,
     editTurf,
     postEditTurf,
+    deleteTurf,
 };

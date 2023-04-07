@@ -17,6 +17,7 @@ const {
     adminItemsView,
     editTurf,
     postEditTurf,
+    deleteTurf,
 
 } = require("../controller/admin")
 
@@ -28,6 +29,7 @@ router.get("/adminhome",ifAdmin,adminHome);
 router.get("/addturf", addTurfPage);
 router.get("/adminitems", adminItemsView);
 router.get("/editturf/:id",editTurf);
+router.get("/deleteturf/:id",deleteTurf);
 router.post("/adminsignup", adminSignup);
 router.post("/adminlogin", adminlogin);
 router.post("/addturf",multer,addTurf);

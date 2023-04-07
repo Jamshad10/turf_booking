@@ -19,7 +19,7 @@
 </head>
 
 <body
-    style="background-image: url('https://img.freepik.com/premium-photo/background-green-grass-field-green-grass-pattern-texture-green-lawn-background_64749-1638.jpg?w=996');">
+    style="background-image: url('https://images.unsplash.com/photo-1544914379-806667cd9489?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHVyZnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60');">
     <!-- Navbar start-->
     <nav class="navbar navbar-dark bg-dark navbar-expand-sm ">
         <a class="navbar-brand m-lg-2" href="#">
@@ -39,10 +39,10 @@
 
     <!-- Navbar end -->
     <!-- Searchbar start -->
-    <form class="form-inline mt-4 d-flex justify-content-center">
-        <input class="form-control mr-2" type="search" placeholder="Search Your Nearest Location" aria-label="Search"
-            style="width: 500px;">
-        <button class="btn btn-info" type="submit"><i class="fas fa-search"></i></button>
+    <form class="form-inline mt-4 d-flex justify-content-center" id="searchForm">
+        <input class="form-control mr-2" type="search" id="searchInput" placeholder="Search Your Nearest Location"
+            aria-label="Search" style="width: 500px;">
+        <button class="btn btn-info" type="submit" id="searchButton"><i class="fas fa-search"></i></button>
     </form>
     <!-- Searchbar end -->
 
@@ -50,7 +50,7 @@
 
     <div class="container bcontent mt-5 ">
         <% turf.forEach(el=> { %>
-            <div class="card m-3" style="width: 1150px; background-color: rgb(48, 42, 42); color: aliceblue;">
+            <div class="card m-3" style="width: 1150px; background-color: rgb(49, 45, 45); color: aliceblue;">
                 <div class="row no-gutters">
                     <div class="col-sm-5">
                         <img class="card-img" src="<%= el.image %>" alt="Turf img">
@@ -66,7 +66,7 @@
                             <h6 class="">Price: <%= el.price %>
                             </h6>
 
-                            <a href="#" class="btn btn-primary mt-1">Book Now</a>
+                            <a href="/payment/<%= el._id %>" class="btn btn-primary mt-1">Book Now</a>
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,39 @@
 
         /* Navbar style end */
     </style>
+    <script>
+      
+$('#searchButton').on('click', function(event) {
+  event.preventDefault(); // prevent the form from being submitted
+  var searchText = $('#searchInput').val().toLowerCase();
+  filterCards(searchText);
+});
 
+function filterCards(searchText) {
+  $('.card').each(function() {
+    var cardName = $(this).find('.card-title').eq(0).text().toLowerCase();
+    var cardLocation = $(this).find('.card-title').eq(1).text().toLowerCase();
+    if (cardName.includes(searchText) || cardLocation.includes(searchText)) {
+      $(this).show();
+    } else {
+      $(this).hide();
+    }
+  });
+}
+$(document).ready(function() {
+  filterCards('');
+});
+
+$('#searchForm').on('submit', function(event) {
+  event.preventDefault(); // prevent the form from being submitted
+  var searchText = $('#searchInput').val().toLowerCase();
+  filterCards(searchText);
+});
+
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
