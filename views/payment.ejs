@@ -35,7 +35,6 @@
                         <div class="form-group">
                             <input class="form-control" type="date" id="date" name="date"><br>
                             <i class="far fa-calendar-alt"></i>
-
                             <label for="time"><b>Available Time Slots:</b> </label>
                             <select class="form-control" id="time" name="time">
                                 <option value="">Select Time</option>
@@ -44,9 +43,8 @@
                                 <option value="9pm-10pm">9.00 pm - 10.00 pm</option>
                                 <option value="10pm-11pm">10.00 pm - 11.00 pm</option>
                                 <option value="11pm-12am">11.00 pm - 12.00 am</option>
-                            </select>
+                            </select>                              
                             <br>
-
                             <div class="form-group">
                                 <input class="form-control " type="number" name="price" value="<%= turf.price %>">
                                 <i class="fa fa-dollar"></i>
@@ -228,8 +226,7 @@
             cursor: not-allowed;
         }
     </style>
-    <!-- <button id="rzp-button1" >Pay with Razorpay</button>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
+
     <script>
         //calender fix........
 
@@ -247,76 +244,9 @@
 
         //calender fix ended.........
 
-        //payment section........
-
-        // var orderId;
-        // $(document).ready(function () {
-        //     var settings = {
-        //         "url": "/create/orderId",
-        //         "method": "POST",
-        //         "timeout": 0,
-        //         "headers": {
-        //             "Content-Type": "application/json"
-        //         },
-        //         "data": JSON.stringify({
-        //             "amount": "50000"
-        //         }),
-        //     };
-
-        //     //creates new orderId everytime
-        //     $.ajax(settings).done(function (response) {
-
-        //         orderId = response.orderId;
-        //         console.log(orderId);
-        //         $("button").show();
-        //     });
-        // });
-        // document.getElementById('rzp-button1').onclick = function (e) {
-        //     var options = {
-        //         "key": "rzp_test_WKrQLwNRyULyLw", // Enter the Key ID generated from the Dashboard
-        //         "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        //         "currency": "INR",
-        //         "name": "Play Spot",
-        //         "description": "Booking Transaction",
-        //         "image": "https://example.com/your_logo",
-        //         "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        //         "handler": function (response) {
-        //             alert(response.razorpay_payment_id);
-        //             alert(response.razorpay_order_id);
-        //             alert(response.razorpay_signature)
-        //             var settings = {
-        //                 "url": "/api/payment/verify",
-        //                 "method": "POST",
-        //                 "timeout": 0,
-        //                 "headers": {
-        //                     "Content-Type": "application/json"
-        //                 },
-        //                 "data": JSON.stringify({ response }),
-        //             }
-        //         },
-        //         "theme": {
-        //             "color": "#99cc33"
-        //         }
-        //     };
-        //     var rzp1 = new Razorpay(options);
-        //     rzp1.on('payment.failed', function (response) {
-        //         alert(response.error.code);
-        //         alert(response.error.description);
-        //         alert(response.error.source);
-        //         alert(response.error.step);
-        //         alert(response.error.reason);
-        //         alert(response.error.metadata.order_id);
-        //         alert(response.error.metadata.payment_id);
-        //     });
-        //     rzp1.open();
-        //     e.preventDefault();
-        // }
-
-
+    
+        
     </script>
-
-
-
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

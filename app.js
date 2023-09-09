@@ -6,10 +6,6 @@ const session = require("express-session");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 
-var instance = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID ,
-    key_secret: process.env.RAZORPAY_KEY_SECRET ,
-  });
 
 const app = express();
 const PORT = process.env.PORT;
@@ -54,40 +50,6 @@ app.use('/admin/editturf', express.static(__dirname + '/public/images/uploads'))
 //route prefix....
 app.use("/admin",require("./routes/admin"));
 app.use("/",require("./routes/user"));
-
-
-//payment section....
-app.post("/create/orderId", (req, res) => {
-    const options = {
-      amount: req.body.amount * 100, // multiply by 100 to convert to paise
-      currency: "INR",
-      receipt: "order_rcp1"
-    };
-    instance.orders.create(options, function (err, order) {
-      if (err) {
-        res.status(500).send({ error: "Failed to create order" });
-      } else {
-        res.send({ orderId: order.id });
-      }
-    });
-  });
-  
-  app.post("/api/payment/verify", (req, res) => {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body.response;
-  
-    const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-      .update(razorpay_order_id + "|" + razorpay_payment_id)
-      .digest("hex");
-  
-    if (expectedSignature === razorpay_signature) {
-      // Payment successful, update order status in database, etc.
-      res.send({ success: true });
-    } else {
-      // Payment failed, handle error
-      res.send({ success: false });
-    }
-  });
 
 
 //server conection....

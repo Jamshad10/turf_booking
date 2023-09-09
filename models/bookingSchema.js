@@ -38,7 +38,10 @@ const bookingSchema = new mongoose.Schema({
       type: String,
       required: true
     }
-  }]
+  }],
+  status: {
+    type: String,
+  }
 });
 
 const booking = mongoose.model("Booking", bookingSchema);

@@ -3,6 +3,13 @@ const Turf = require("../models/turfSchema");
 const otpSc = require("../models/otpSchema");
 const nodemailer = require("nodemailer");
 const Booking = require("../models/bookingSchema");
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
+
+var instance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -63,7 +70,7 @@ const getverify = async (req, res) => {
 const postOtpVerify = async (req, res) => {
     try {
         const { email, token } = req.session.signup;
-        const { digit1, digit2, digit3, digit4} = req.body;
+        const { digit1, digit2, digit3, digit4 } = req.body;
         const enteredToken = digit1 + digit2 + digit3 + digit4;
         if (token == enteredToken) {
             const user = new otpSc({ email });
@@ -87,34 +94,37 @@ const paymentPage = async (req, res) => {
         res.render("payment", {
             title: "Payment Page",
             turf: turf,
-    })
-    
+        })
+
     });
 
 };
+  
 
 const postBooking = (req, res) => {
     const booking = new Booking({
-      turf: req.body.turf,
-      email: req.body.email,
-      name: req.body.name,
-      date: req.body.date,
-      time: req.body.time,
-      price: req.body.price,
+        turf: req.body.turf,
+        email: req.body.email,
+        name: req.body.name,
+        date: req.body.date,
+        time: req.body.time,
+        price: req.body.price,
     });
     booking.booked.push({
-      date: req.body.date,
-      time: req.body.time,
-      turf: req.body.turf,
+        date: req.body.date,
+        time: req.body.time,
+        turf: req.body.turf,
     });
+    const id = booking.id
     booking.save().then((users) => {
-      res.render("paymentVerify", {
-        users,
-        title: "Payment Verify",
-      });
+        res.render("paymentVerify", {
+            users,
+            id,
+            title: "Payment Verify",
+        });
     });
-  };
-  
+};
+
 
 const paymentVerifyPage = (req, res) => {
     Booking.find().then(users => {
@@ -125,6 +135,76 @@ const paymentVerifyPage = (req, res) => {
     })
 };
 
+const razorpayCreatOrderId = (req, res) => {
+    const options = {
+        amount: req.body.amount * 100, // multiply by 100 to convert to paise
+        currency: "INR",
+        receipt: "order_rcp1"
+    };
+    instance.orders.create(options, function (err, order) {
+        if (err) {
+            res.status(500).send({ error: "Failed to create order" });
+        } else {
+            res.send({ orderId: order.id });
+        }
+    });
+};
+
+
+
+const razorpayPaymentVerify = async (req, res) => {
+    const bookingId = req.body.bookingid;
+    console.log(bookingId, "hy");
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body.response;
+
+    const expectedSignature = crypto
+        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+        .update(razorpay_order_id + "|" + razorpay_payment_id)
+        .digest("hex");
+
+    try {
+        // Update the booking record in the database with the Razorpay payment details
+        const updatedBooking = await Booking.findOneAndUpdate(
+            {
+                orderId: razorpay_order_id,
+                _id: bookingId
+            },
+            {
+                paymentId: razorpay_payment_id,
+                signature: razorpay_signature,
+                status: 'Paid',
+                correspondentId: bookingId // Update the correspondent ID in the record
+            },
+            { new: true }
+        );
+        console.log(updatedBooking);
+        res.send({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({ error: 'Failed to update booking' });
+    }
+};
+
+const invoice = async (req, res) => {
+    try {
+        const bookingId = req.query.id;
+        const paymentId = req.query.paymentId;
+        const orderId = req.query.orderId;
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            throw new Error('Booking not found');
+        }
+        res.render('invoice', {
+            booking,
+            paymentId,
+            orderId,
+            title: "Invoice"
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('error');
+    }
+};
 
 module.exports = {
     userHome,
@@ -136,4 +216,7 @@ module.exports = {
     paymentPage,
     postBooking,
     paymentVerifyPage,
+    razorpayCreatOrderId,
+    razorpayPaymentVerify,
+    invoice,
 }

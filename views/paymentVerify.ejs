@@ -12,7 +12,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-offset-3 col-md-6 mx-auto">
-                    <form class="form-horizontal m-2 mx-auto" id="payment-form">
+                    <form method="post" action="/api/payment/verify" class="form-horizontal m-2 mx-auto" id="payment-form">
                         <span class="heading">Confirm & Pay</span>
 
                         <div class="form-group help">
@@ -40,11 +40,11 @@
 
                             <label for="time"><b>Available Time Slots:</b> </label>
                             <select class="form-control" id="time" name="time">
-                               
+
                                 <option value="<%= users.time %>">
                                     <%= users.time %>
                                 </option>
-                                
+
                             </select>
                             <br>
 
@@ -52,6 +52,8 @@
                                 <input class="form-control " type="number" name="price"
                                     style="background-color: #4CAF50; color: #eee;" value="<%= users.price %>">
                                 <i class="fa fa-dollar"></i>
+                                <input type="hidden" name="bookingid" id="bookingid" value="<%= id %>">
+                                
                             </div>
                             <br>
                             <button class="form-control btn btn-default" id="rzp-button1"
@@ -253,81 +255,83 @@
         //payment section........
 
         var orderId;
-$(document).ready(function () {
-    var settings = {
-        "method": "POST",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "body": JSON.stringify({
-            "amount": "<%= users.price %>"
-        }),
-    };
-
-    //creates new orderId everytime
-    fetch('/create/orderId', settings)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            orderId = data.orderId;
-            console.log(orderId);
-            $("button").show();
-        });
-});
-
-document.getElementById('rzp-button1').onclick = function (e) {
-    var options = {
-        "key": "rzp_test_WKrQLwNRyULyLw", // Enter the Key ID generated from the Dashboard
-        "amount": "<%= users.price * 100 %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        "currency": "INR",
-        "name": "Play Spot",
-        "description": "Booking Transaction",
-        "image": "https://example.com/your_logo",
-        "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        "handler": function (response) {
-            alert(response.razorpay_payment_id);
-            alert(response.razorpay_order_id);
-            alert(response.razorpay_signature);
+        $(document).ready(function () {
             var settings = {
                 "method": "POST",
                 "headers": {
                     "Content-Type": "application/json"
                 },
-                "body": JSON.stringify({ response }),
+                "body": JSON.stringify({
+                    "amount": "<%= users.price %>"
+                }),
             };
-            fetch('/api/payment/verify', settings)
-                .then(function(response) {
+
+            //creates new orderId everytime
+            fetch('/create/orderId', settings)
+                .then(function (response) {
                     return response.json();
                 })
-                .then(function(data) {
-                    if (data.success) {
-                        // Payment successful, update order status in database, etc.
-                        alert('Payment successful');
-                    } else {
-                        // Payment failed, handle error
-                        alert('Payment failed');
-                    }
+                .then(function (data) {
+                    orderId = data.orderId;
+                    console.log(orderId);
+                    $("button").show();
                 });
-        },
-        "theme": {
-            "color": "#99cc33"
-        }
-    };
-    var rzp1 = new Razorpay(options);
-    rzp1.on('payment.failed', function (response) {
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
-    });
-    rzp1.open();
-    e.preventDefault();
-};
+        });
 
+        document.getElementById('rzp-button1').onclick = function (e) {
+            var options = {
+                "key": "rzp_test_WKrQLwNRyULyLw", // Enter the Key ID generated from the Dashboard
+                "amount": "<%= users.price * 100 %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "Play Spot",
+                "description": "Booking Transaction",
+                "image": "https://example.com/your_logo",
+                "order_id": orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function (response) {
+                    alert(response.razorpay_payment_id);
+                    alert(response.razorpay_order_id);
+                    alert(response.razorpay_signature);
+                    var settings = {
+                        "method": "POST",
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "body": JSON.stringify({ response,bookingid: "<%= id %>" }),
+                    };
+                    fetch('/api/payment/verify', settings)
+                    
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            if (data.success) {
+                                // Payment successful, update order status in database, etc.
+                                alert('Payment successful');
+                                window.location.href = '/invoice?id=' + "<%= id %>" + '&paymentId=' + response.razorpay_payment_id + '&orderId=' + response.razorpay_order_id ;
+                                
+                            } else {
+                                // Payment failed, handle error
+                                alert('Payment failed');
+                            }
+                        });
+                },
+                "theme": {
+                    "color": "#99cc33"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+                alert(response.error.code);
+                alert(response.error.description);
+                alert(response.error.source);
+                alert(response.error.step);
+                alert(response.error.reason);
+                alert(response.error.metadata.order_id);
+                alert(response.error.metadata.payment_id);
+            });
+            rzp1.open();
+            e.preventDefault();
+        };
 
     </script>
 
